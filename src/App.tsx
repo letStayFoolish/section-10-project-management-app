@@ -19,17 +19,22 @@ function App() {
     });
   };
 
-  const handleAddNewProject = (projectData: ProjectType) => {
+  const handleAddNewProject = (projectData: Omit<ProjectType, "id">) => {
+    const projectId = Math.random();
+
+    const newProject = {
+      ...projectData,
+      id: projectId,
+    };
+
     setProjectsState((prevState) => {
       return {
         ...prevState,
-        projects: [...prevState.projects, projectData],
-        selectedProjectId: null,
+        selectedProjectId: undefined,
+        projects: [...prevState.projects, newProject],
       };
     });
   };
-
-  console.log({ projectsState });
 
   let content;
 
@@ -41,7 +46,10 @@ function App() {
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onCreateNewProject={handleStartAddNewProject} />
+      <ProjectsSidebar
+        onCreateNewProject={handleStartAddNewProject}
+        projectList={projectsState.projects}
+      />
       {content}
     </main>
   );

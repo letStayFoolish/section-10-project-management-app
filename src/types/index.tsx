@@ -1,5 +1,5 @@
 export type ProjectState = {
-  selectedProjectId: string | undefined | null;
+  selectedProjectId: number | undefined | null;
   projects: ProjectType[];
 };
 

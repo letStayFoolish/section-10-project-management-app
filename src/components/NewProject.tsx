@@ -3,7 +3,7 @@ import ForwardedInput from "./Input.tsx";
 import type { ProjectType } from "../types";
 
 type Props = {
-  onAdd: (projectData: ProjectType) => void;
+  onAdd: (projectData: Omit<ProjectType, "id">) => void;
 };
 
 const NewProject: React.FC<Props> = ({ onAdd }) => {
@@ -16,14 +16,11 @@ const NewProject: React.FC<Props> = ({ onAdd }) => {
     const enteredDescription = descriptionRef.current?.value;
     const enteredDueDate = dueDateRef.current?.value;
 
-    const id = Math.random();
-
     // validation ...
 
     if (!enteredTitle || !enteredDescription || !enteredDueDate) return;
 
-    const newProject: ProjectType = {
-      id,
+    const newProject: Omit<ProjectType, "id"> = {
       title: enteredTitle,
       description: enteredDescription,
       dueDate: enteredDueDate,
