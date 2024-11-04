@@ -3,7 +3,11 @@ import React from "react";
 import noProjectImage from "../assets/no-projects.png";
 import Button from "./Button.tsx";
 
-const NoProjectSelected: React.FC = () => {
+type Props = {
+  onAddNewProject: () => void;
+};
+
+const NoProjectSelected: React.FC<Props> = ({ onAddNewProject }) => {
   return (
     <div className="mt-24 text-center w-2/3">
       <img
@@ -18,7 +22,7 @@ const NoProjectSelected: React.FC = () => {
         Select a project or get started with a new project
       </p>
       <p className="mt-8">
-        <Button>Create new project</Button>
+        <Button onClick={onAddNewProject}>Create new project</Button>
       </p>
     </div>
   );

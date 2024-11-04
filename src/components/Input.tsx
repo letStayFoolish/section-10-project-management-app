@@ -1,11 +1,23 @@
-import React from "react";
+import React, {
+  forwardRef,
+  InputHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 
-type Props = {
-  label: string;
-  isTextArea?: boolean;
-};
+type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
-const Input: React.FC<Props> = ({ label, isTextArea, ...props }) => {
+type TextAreaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+type Props = InputProps &
+  TextAreaProps & {
+    label: string;
+    isTextArea?: boolean;
+  };
+
+const Input: React.ForwardRefRenderFunction<
+  HTMLInputElement | HTMLTextAreaElement,
+  Props
+> = ({ label, isTextArea, ...props }, ref) => {
   const classes =
     "w-full p-1 border-b-2 rounded-sm border-stone-300 bg-stone-200 text-stone-600 focus:outline-none focus:border-stone-600";
   return (
@@ -14,12 +26,22 @@ const Input: React.FC<Props> = ({ label, isTextArea, ...props }) => {
         {label}
       </label>
       {isTextArea ? (
-        <textarea className={classes} {...props} />
+        <textarea
+          ref={ref as React.Ref<HTMLTextAreaElement>}
+          className={classes}
+          {...props}
+        />
       ) : (
-        <input {...props} className={classes} />
+        <input
+          ref={ref as React.Ref<HTMLInputElement>}
+          {...props}
+          className={classes}
+        />
       )}
     </p>
   );
 };
 
-export default Input;
+const ForwardedInput = forwardRef(Input);
+
+export default ForwardedInput;
