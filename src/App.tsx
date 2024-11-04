@@ -3,6 +3,7 @@ import ProjectsSidebar from "./components/ProjectsSidebar.tsx";
 import NoProjectSelected from "./components/NoProjectSelected.tsx";
 import NewProject from "./components/NewProject.tsx";
 import type { ProjectState, ProjectType } from "./types";
+import SelectedProject from "./components/SelectedProject.tsx";
 
 function App() {
   const [projectsState, setProjectsState] = useState<ProjectState>({
@@ -45,7 +46,20 @@ function App() {
     });
   };
 
-  let content;
+  const handleSelectProject = (projectId: number) => {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: projectId,
+      };
+    });
+  };
+
+  const selectedProject = projectsState.projects.find(
+    (project) => project.id === projectsState.selectedProjectId,
+  );
+
+  let content = <SelectedProject project={selectedProject} />;
 
   if (projectsState.selectedProjectId === null) {
     content = (
@@ -60,6 +74,8 @@ function App() {
       <ProjectsSidebar
         onCreateNewProject={handleStartAddNewProject}
         projectList={projectsState.projects}
+        onSelectProject={handleSelectProject}
+        selectedProject={selectedProject}
       />
       {content}
     </main>
