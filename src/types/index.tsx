@@ -9,3 +9,10 @@ export type ProjectType = {
   description: string;
   dueDate: string;
 };
+
+export type ModalRef = HTMLDialogElement & ModalRefMethods;
+
+export type ModalRefMethods = {
+  closeModal: () => void;
+  openModal: () => void;
+};
