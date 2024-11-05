@@ -1,12 +1,22 @@
 import React from "react";
-import { ProjectType } from "../types";
+import { ProjectType, TaskType } from "../types";
+import Tasks from "./Tasks.tsx";
 
 type Props = {
   project: ProjectType | undefined;
   onDelete: () => void;
+  onAddTask: (taskName: string) => void;
+  onDeleteTask: (taskId: number) => void;
+  tasks: TaskType[];
 };
 
-const SelectedProject: React.FC<Props> = ({ project, onDelete }) => {
+const SelectedProject: React.FC<Props> = ({
+  project,
+  onDelete,
+  onAddTask,
+  onDeleteTask,
+  tasks,
+}) => {
   if (!project) return;
 
   const formattedDate = new Date(project?.dueDate).toLocaleDateString("en-US", {
@@ -34,7 +44,7 @@ const SelectedProject: React.FC<Props> = ({ project, onDelete }) => {
           {project.description}
         </p>
       </header>
-      TASKS
+      <Tasks onAdd={onAddTask} tasks={tasks} onDelete={onDeleteTask} />
     </div>
   );
 };

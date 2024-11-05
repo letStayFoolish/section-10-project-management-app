@@ -2,14 +2,50 @@ import { useState } from "react";
 import ProjectsSidebar from "./components/ProjectsSidebar.tsx";
 import NoProjectSelected from "./components/NoProjectSelected.tsx";
 import NewProject from "./components/NewProject.tsx";
-import type { ProjectState, ProjectType } from "./types";
+import { ProjectState, ProjectType, TaskType } from "./types";
 import SelectedProject from "./components/SelectedProject.tsx";
 
+const initialState: ProjectState = {
+  selectedProjectId: undefined,
+  projects: [],
+  tasks: [],
+};
+
 function App() {
-  const [projectsState, setProjectsState] = useState<ProjectState>({
-    selectedProjectId: undefined,
-    projects: [],
-  });
+  const [projectsState, setProjectsState] =
+    useState<ProjectState>(initialState);
+
+  const handleAddTask = (taskName: string) => {
+    if (!selectedProject?.id) return;
+
+    setProjectsState((prevState) => {
+      const taskId = Math.random();
+
+      const newTask: TaskType = {
+        id: taskId,
+        projectId: selectedProject.id,
+        name: taskName,
+      };
+
+      return {
+        ...prevState,
+        tasks: [newTask, ...prevState.tasks],
+      };
+    });
+  };
+
+  const handleDeleteTask = (taskId: number) => {
+    setProjectsState((prevState) => {
+      const filteredTasks = prevState.tasks.filter(
+        (task) => task.id !== taskId,
+      );
+
+      return {
+        ...prevState,
+        tasks: filteredTasks,
+      };
+    });
+  };
 
   const handleStartAddNewProject = () => {
     setProjectsState((prevState) => {
@@ -71,8 +107,18 @@ function App() {
     (project) => project.id === projectsState.selectedProjectId,
   );
 
+  const selectedProjectTasks = projectsState.tasks.filter(
+    (task) => task.projectId === projectsState.selectedProjectId,
+  );
+
   let content = (
-    <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />
+    <SelectedProject
+      tasks={selectedProjectTasks}
+      project={selectedProject}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+    />
   );
 
   if (projectsState.selectedProjectId === null) {
